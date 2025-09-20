@@ -1,0 +1,653 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>نظام المحاسبة المتكامل</title>
+    <style>
+        :root {
+            --primary-color: #2c3e50;
+            --secondary-color: #3498db;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+            line-height: 1.6;
+        }
+        
+        .container {
+            width: 90%;
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 20px 0;
+            text-align: center;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        nav {
+            background-color: var(--secondary-color);
+            padding: 10px;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+        
+        nav ul {
+            display: flex;
+            justify-content: space-around;
+            list-style: none;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s;
+        }
+        
+        nav ul li a:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .section {
+            display: none;
+            background-color: white;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+        
+        table, th, td {
+            border: 1px solid #ddd;
+        }
+        
+        th, td {
+            padding: 12px;
+            text-align: center;
+        }
+        
+        th {
+            background-color: var(--secondary-color);
+            color: white;
+        }
+        
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+        
+        .card {
+            background-color: white;
+            border-radius: 5px;
+            padding: 20px;
+            margin: 10px 0;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        
+        .summary-card {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+        }
+        
+        .summary-item {
+            flex: 1;
+            min-width: 200px;
+            margin: 10px;
+            padding: 15px;
+            border-radius: 5px;
+            text-align: center;
+            color: white;
+        }
+        
+        .revenue {
+            background-color: var(--success-color);
+        }
+        
+        .expenses {
+            background-color: var(--accent-color);
+        }
+        
+        .profit {
+            background-color: var(--secondary-color);
+        }
+        
+        .tax {
+            background-color: var(--warning-color);
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        button {
+            background-color: var(--secondary-color);
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s;
+        }
+        
+        button:hover {
+            background-color: var(--primary-color);
+        }
+        
+        .chart-container {
+            width: 100%;
+            height: 300px;
+            margin: 20px 0;
+        }
+        
+        @media (max-width: 768px) {
+            nav ul {
+                flex-direction: column;
+            }
+            
+            nav ul li {
+                margin: 5px 0;
+            }
+            
+            .summary-item {
+                min-width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>نظام المحاسبة المتكامل</h1>
+    </header>
+    
+    <div class="container">
+        <nav>
+            <ul>
+                <li><a href="#" onclick="showSection('dashboard')">لوحة التحكم</a></li>
+                <li><a href="#" onclick="showSection('products')">المشروبات</a></li>
+                <li><a href="#" onclick="showSection('sales')">المبيعات</a></li>
+                <li><a href="#" onclick="showSection('income')">قائمة الدخل</a></li>
+                <li><a href="#" onclick="showSection('tax')">الضرائب</a></li>
+                <li><a href="#" onclick="showSection('reports')">التقارير</a></li>
+            </ul>
+        </nav>
+        
+        <!-- لوحة التحكم -->
+        <section id="dashboard" class="section active">
+            <h2>لوحة التحكم</h2>
+            <div class="summary-card">
+                <div class="summary-item revenue">
+                    <h3>الإيرادات</h3>
+                    <p>5,000 ريال</p>
+                </div>
+                <div class="summary-item expenses">
+                    <h3>المصروفات</h3>
+                    <p>2,500 ريال</p>
+                </div>
+                <div class="summary-item profit">
+                    <h3>صافي الربح</h3>
+                    <p>2,500 ريال</p>
+                </div>
+                <div class="summary-item tax">
+                    <h3>الضرائب</h3>
+                    <p>375 ريال</p>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>آخر المبيعات</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم العملية</th>
+                            <th>التاريخ</th>
+                            <th>المبلغ</th>
+                            <th>المنتج</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>1001</td>
+                            <td>2023-10-15</td>
+                            <td>150 ريال</td>
+                            <td>قهوة عربية</td>
+                        </tr>
+                        <tr>
+                            <td>1002</td>
+                            <td>2023-10-15</td>
+                            <td>80 ريال</td>
+                            <td>شاي أخضر</td>
+                        </tr>
+                        <tr>
+                            <td>1003</td>
+                            <td>2023-10-14</td>
+                            <td>200 ريال</td>
+                            <td>عصير برتقال</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- قسم المشروبات -->
+        <section id="products" class="section">
+            <h2>إدارة المشروبات</h2>
+            <div class="card">
+                <h3>إضافة مشروب جديد</h3>
+                <div class="form-group">
+                    <label for="product-name">اسم المشروب</label>
+                    <input type="text" id="product-name" placeholder="أدخل اسم المشروب">
+                </div>
+                <div class="form-group">
+                    <label for="product-price">السعر</label>
+                    <input type="number" id="product-price" placeholder="أدخل السعر">
+                </div>
+                <div class="form-group">
+                    <label for="product-cost">التكلفة</label>
+                    <input type="number" id="product-cost" placeholder="أدخل التكلفة">
+                </div>
+                <button onclick="addProduct()">إضافة مشروب</button>
+            </div>
+            
+            <div class="card">
+                <h3>قائمة المشروبات</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>اسم المشروب</th>
+                            <th>السعر</th>
+                            <th>التكلفة</th>
+                            <th>هامش الربح</th>
+                            <th>الإجراءات</th>
+                        </tr>
+                    </thead>
+                    <tbody id="products-table">
+                        <tr>
+                            <td>قهوة عربية</td>
+                            <td>25 ريال</td>
+                            <td>10 ريال</td>
+                            <td>15 ريال</td>
+                            <td>
+                                <button>تعديل</button>
+                                <button>حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>شاي أخضر</td>
+                            <td>15 ريال</td>
+                            <td>5 ريال</td>
+                            <td>10 ريال</td>
+                            <td>
+                                <button>تعديل</button>
+                                <button>حذف</button>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>عصير برتقال</td>
+                            <td>20 ريال</td>
+                            <td>8 ريال</td>
+                            <td>12 ريال</td>
+                            <td>
+                                <button>تعديل</button>
+                                <button>حذف</button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- قسم المبيعات -->
+        <section id="sales" class="section">
+            <h2>إدارة المبيعات</h2>
+            <div class="card">
+                <h3>تسجيل مبيعات جديدة</h3>
+                <div class="form-group">
+                    <label for="sale-product">اختر المشروب</label>
+                    <select id="sale-product">
+                        <option value="">اختر مشروب</option>
+                        <option value="1">قهوة عربية - 25 ريال</option>
+                        <option value="2">شاي أخضر - 15 ريال</option>
+                        <option value="3">عصير برتقال - 20 ريال</option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="sale-quantity">الكمية</label>
+                    <input type="number" id="sale-quantity" value="1" min="1">
+                </div>
+                <button onclick="addSale()">تسجيل البيع</button>
+            </div>
+            
+            <div class="card">
+                <h3>سجل المبيعات</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>رقم العملية</th>
+                            <th>التاريخ</th>
+                            <th>المشروب</th>
+                            <th>الكمية</th>
+                            <th>السعر</th>
+                            <th>المبلغ الإجمالي</th>
+                        </tr>
+                    </thead>
+                    <tbody id="sales-table">
+                        <tr>
+                            <td>1001</td>
+                            <td>2023-10-15</td>
+                            <td>قهوة عربية</td>
+                            <td>2</td>
+                            <td>25 ريال</td>
+                            <td>50 ريال</td>
+                        </tr>
+                        <tr>
+                            <td>1002</td>
+                            <td>2023-10-15</td>
+                            <td>شاي أخضر</td>
+                            <td>3</td>
+                            <td>15 ريال</td>
+                            <td>45 ريال</td>
+                        </tr>
+                        <tr>
+                            <td>1003</td>
+                            <td>2023-10-14</td>
+                            <td>عصير برتقال</td>
+                            <td>4</td>
+                            <td>20 ريال</td>
+                            <td>80 ريال</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- قائمة الدخل -->
+        <section id="income" class="section">
+            <h2>قائمة الدخل</h2>
+            <div class="card">
+                <h3>الإيرادات والمصروفات</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>البند</th>
+                            <th>المبلغ</th>
+                            <th>النسبة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>إجمالي الإيرادات</td>
+                            <td>5,000 ريال</td>
+                            <td>100%</td>
+                        </tr>
+                        <tr>
+                            <td>تكلفة البضاعة المباعة</td>
+                            <td>2,000 ريال</td>
+                            <td>40%</td>
+                        </tr>
+                        <tr>
+                            <td>إجمالي الربح</td>
+                            <td>3,000 ريال</td>
+                            <td>60%</td>
+                        </tr>
+                        <tr>
+                            <td>المصروفات التشغيلية</td>
+                            <td>500 ريال</td>
+                            <td>10%</td>
+                        </tr>
+                        <tr>
+                            <td>صافي الربح قبل الضرائب</td>
+                            <td>2,500 ريال</td>
+                            <td>50%</td>
+                        </tr>
+                        <tr>
+                            <td>الضرائب</td>
+                            <td>375 ريال</td>
+                            <td>7.5%</td>
+                        </tr>
+                        <tr>
+                            <td><strong>صافي الربح</strong></td>
+                            <td><strong>2,125 ريال</strong></td>
+                            <td><strong>42.5%</strong></td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- الضرائب -->
+        <section id="tax" class="section">
+            <h2>إدارة الضرائب</h2>
+            <div class="card">
+                <h3>حساب الضرائب</h3>
+                <div class="form-group">
+                    <label for="tax-rate">نسبة الضريبة (%)</label>
+                    <input type="number" id="tax-rate" value="15">
+                </div>
+                <div class="form-group">
+                    <label for="taxable-amount">المبلغ الخاضع للضريبة</label>
+                    <input type="number" id="taxable-amount" value="2500" readonly>
+                </div>
+                <div class="form-group">
+                    <label for="tax-amount">مبلغ الضريبة</label>
+                    <input type="number" id="tax-amount" value="375" readonly>
+                </div>
+                <button onclick="calculateTax()">حساب الضريبة</button>
+            </div>
+            
+            <div class="card">
+                <h3>سجل الضرائب</h3>
+                <table>
+                    <thead>
+                        <tr>
+                            <th>الفترة</th>
+                            <th>المبلغ الخاضع للضريبة</th>
+                            <th>نسبة الضريبة</th>
+                            <th>مبلغ الضريبة</th>
+                            <th>الحالة</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>أكتوبر 2023</td>
+                            <td>2,500 ريال</td>
+                            <td>15%</td>
+                            <td>375 ريال</td>
+                            <td>غير مدفوعة</td>
+                        </tr>
+                        <tr>
+                            <td>سبتمبر 2023</td>
+                            <td>2,200 ريال</td>
+                            <td>15%</td>
+                            <td>330 ريال</td>
+                            <td>مدفوعة</td>
+                        </tr>
+                        <tr>
+                            <td>أغسطس 2023</td>
+                            <td>2,800 ريال</td>
+                            <td>15%</td>
+                            <td>420 ريال</td>
+                            <td>مدفوعة</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+        
+        <!-- التقارير -->
+        <section id="reports" class="section">
+            <h2>التقارير المالية</h2>
+            <div class="card">
+                <h3>تقرير الأرباح والخسائر</h3>
+                <div class="chart-container">
+                    <canvas id="profitLossChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>تقرير المبيعات</h3>
+                <div class="chart-container">
+                    <canvas id="salesChart"></canvas>
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>تصدير التقارير</h3>
+                <button>تصدير كملف Excel</button>
+                <button>تصدير كملف PDF</button>
+                <button>طباعة التقرير</button>
+            </div>
+        </section>
+    </div>
+
+    <script>
+        // وظيفة للتبديل بين الأقسام
+        function showSection(sectionId) {
+            // إخفاء جميع الأقسام
+            document.querySelectorAll('.section').forEach(section => {
+                section.classList.remove('active');
+            });
+            
+            // إظهار القسم المحدد
+            document.getElementById(sectionId).classList.add('active');
+        }
+        
+        // وظيفة لإضافة منتج جديد
+        function addProduct() {
+            const name = document.getElementById('product-name').value;
+            const price = document.getElementById('product-price').value;
+            const cost = document.getElementById('product-cost').value;
+            
+            if (name && price && cost) {
+                const profit = price - cost;
+                const table = document.getElementById('products-table');
+                const newRow = table.insertRow();
+                
+                newRow.innerHTML = `
+                    <td>${name}</td>
+                    <td>${price} ريال</td>
+                    <td>${cost} ريال</td>
+                    <td>${profit} ريال</td>
+                    <td>
+                        <button>تعديل</button>
+                        <button onclick="deleteProduct(this)">حذف</button>
+                    </td>
+                `;
+                
+                // مسح الحقول بعد الإضافة
+                document.getElementById('product-name').value = '';
+                document.getElementById('product-price').value = '';
+                document.getElementById('product-cost').value = '';
+                
+                alert('تم إضافة المنتج بنجاح!');
+            } else {
+                alert('يرجى ملء جميع الحقول!');
+            }
+        }
+        
+        // وظيفة لحذف منتج
+        function deleteProduct(button) {
+            const row = button.parentNode.parentNode;
+            row.parentNode.removeChild(row);
+        }
+        
+        // وظيفة لتسجيل عملية بيع
+        function addSale() {
+            const productSelect = document.getElementById('sale-product');
+            const quantity = document.getElementById('sale-quantity').value;
+            
+            if (productSelect.value && quantity > 0) {
+                const productText = productSelect.options[productSelect.selectedIndex].text;
+                const productName = productText.split(' - ')[0];
+                const productPrice = parseInt(productText.split(' - ')[1]);
+                const total = productPrice * quantity;
+                
+                const table = document.getElementById('sales-table');
+                const newRow = table.insertRow();
+                
+                // إنشاء رقم عملية عشوائي
+                const transactionId = Math.floor(1000 + Math.random() * 9000);
+                
+                // الحصول على التاريخ الحالي
+                const today = new Date();
+                const dateString = today.toISOString().split('T')[0];
+                
+                newRow.innerHTML = `
+                    <td>${transactionId}</td>
+                    <td>${dateString}</td>
+                    <td>${productName}</td>
+                    <td>${quantity}</td>
+                    <td>${productPrice} ريال</td>
+                    <td>${total} ريال</td>
+                `;
+                
+                // إعادة تعيين الحقول
+                productSelect.value = '';
+                document.getElementById('sale-quantity').value = '1';
+                
+                alert('تم تسجيل البيع بنجاح!');
+            } else {
+                alert('يرجى اختيار منتج وكمية صحيحة!');
+            }
+        }
+        
+        // وظيفة لحساب الضريبة
+        function calculateTax() {
+            const taxRate = document.getElementById('tax-rate').value;
+            const taxableAmount = document.getElementById('taxable-amount').value;
+            const taxAmount = (taxableAmount * taxRate) / 100;
+            
+            document.getElementById('tax-amount').value = taxAmount;
+        }
+        
+        // تهيئة الرسوم البيانية عند تحميل الصفحة
+        window.onload = function() {
+            // هذا مكان لتهيئة الرسوم البيانية باستخدام مكتبة مثل Chart.js
+            // في تطبيق حقيقي، سنقوم بتحميل المكتبة واستخدامها هنا
+            console.log("سيتم هنا تهيئة الرسوم البيانية عند دمج مكتبة Chart.js");
+        };
+    </script>
+</body>
+</html>
